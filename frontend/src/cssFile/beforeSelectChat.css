@@ -1,0 +1,26 @@
+.before-selected-chat{
+    width: 100%;
+    background-color:#c1c3c6;
+    display: grid;
+    text-align: center;
+    place-items: center;
+    min-width: 400px;
+}
+.bg-for-before-selected-chat{
+    height:200px;
+    width:400px;
+    background-image: url('https://www.svgrepo.com/show/6995/chat.svg');
+    background-size: 200px;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: grid;
+    place-items: center;
+    text-align: center;
+}
+
+
+.before-selected-chat-bg-image-text span{
+    font-size: 30px;
+    /* color: rgb(255, 255, 255); */
+    text-align: center;
+}
