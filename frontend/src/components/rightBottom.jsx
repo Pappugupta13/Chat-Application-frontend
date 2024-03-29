@@ -5,6 +5,7 @@ import { useUserContext } from '../context/themeContext';
 import EmojiPicker from "emoji-picker-react";
 import getConversation from '../hooks/getConversation';
 import convertSize from '../hooks/convertSize';
+import {getURL} from '../firebase/firebase';
 const RightBottom = () => {
   // all hooks are ...
   const { data } = useUserContext();
@@ -40,17 +41,18 @@ const RightBottom = () => {
 
 
   // base 64 data
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     const size = convertSize(file.size)
     const extension = file.name.split('.')[1]
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const imageBase64 = reader.result;
         let type = file.type.split("/");
         let types = (type[0] === 'application' || type[0] === 'text'||type[0] === '') ? 'document' : type[0];
-        conversation({ files: { url: imageBase64, type: types, name: file.name, extension, size } });
+        let url = file.size >20971520 ?await getURL({name:file.name,size:file.size,file}):imageBase64;
+        conversation({ files: { url, type: types, name: file.name, extension, size}});
         
       };
       reader.readAsDataURL(file);
