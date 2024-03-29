@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../cssFile/profileViewer.css';
 import StatusTypes from './statusTypes';
+import { getURL } from '../firebase/firebase';
 import { addStatus, deleteStatus } from '../hooks/convertTime';
 const Status = ({ status, showAndHide, admin }) => {
 
@@ -13,24 +14,24 @@ const Status = ({ status, showAndHide, admin }) => {
 
     // adding the status for the admin user
     const addStatuss = () => {
+
         addStatus({ text: data.text, url: data.url, type: data.type })
         // setDataForStatus({...data,url:'',type:'',text:''})
     }
 
     // add status either video and image and converts into base64 data
-    const handleImageUploads = (event) => {
+    const handleImageUploads = async (event) => {
         const file = event.target.files[0];
         const size_in_mb = file.size / (1024 * 1024);
-        if (size_in_mb > 5) {
-            return alert("please select file upto 5mb")
+        if (size_in_mb > 10) {
+            return alert("please select file upto 10mb")
         }
+
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const imageBase64 = reader.result;
-                setDataForStatus({ ...data, type: file.type.split("/")[0], url: imageBase64 })
-            };
-            reader.readAsDataURL(file);
+            alert("please wait few  seconds");
+            const url = await getURL({ name: file.name, size: file.size, file })
+            setDataForStatus({ ...data, type: file.type.split("/")[0], url })
+
         }
     };
 
@@ -40,7 +41,7 @@ const Status = ({ status, showAndHide, admin }) => {
                 <svg aria-label="Close" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Close</title><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="3" y2="21"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="21" y2="3"></line></svg>
             </div>
 
-            <div style={{ height: '100%'}}>
+            <div style={{ height: '100%' }}>
                 {status.type != null && <StatusTypes content={status} />}
                 {data.type && admin && <StatusTypes content={data} />}
                 {(status.type === null || status.type === 'undefined') && admin &&
@@ -52,7 +53,7 @@ const Status = ({ status, showAndHide, admin }) => {
 
                     </div>}
 
-                {admin&&status.type != null&&
+                {admin && status.type != null &&
                     <div className='input-file-select-add-icon' style={{ justifyContent: 'space-between' }}>
                         <span className='delete-the-status'>Delete the status</span>
                         <button onClick={deleteStatus} className='delete-the-status-button'><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 100 100">
@@ -60,7 +61,7 @@ const Status = ({ status, showAndHide, admin }) => {
                         </svg></button>
                     </div>
                 }
-                
+
             </div>
         </div>
     )
