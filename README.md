@@ -10,3 +10,4 @@ Feature List:
 -   Completely Responsive
 -   Chat App With Image, Audio, Video and Document
 -   Seen/Unseen for Messages
+-   Firebase for Storage 
