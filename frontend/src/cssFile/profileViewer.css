@@ -130,3 +130,7 @@
  cursor: pointer;
  background-color: rgb(226, 109, 55);
 }
+.status-video{
+    max-width: 95%;
+    min-width: auto;
+}
