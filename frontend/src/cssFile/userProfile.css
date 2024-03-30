@@ -11,6 +11,16 @@
     position: relative;
 
 }
+.User-profile-container-name-last-message{
+    display: grid;
+    width: 100%;
+}
+.User-profile-container-name-last-message .last-message{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgb(240, 232, 232);
+}
 .online{
     background-color:blue;
     height: 12px;
@@ -33,9 +43,7 @@
     font-size: 22px;
     color: aliceblue;
     width: 160px;
-    white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
 }
 .rocket{
     font-size: 25px;
