@@ -1,18 +1,13 @@
 const apiUrl = import.meta.env.VITE_APP_API_URL;
 const convertTime = ({time}) => {
-    const dateObject = new Date(time);
-    const hours = dateObject.getUTCHours();
-    const minutes = dateObject.getUTCMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;;
+    const dateObject = time.split(" ");
+    const hr = dateObject[1].split(":")[0];
+    const sec = dateObject[1].split(":")[1]
+    return `${hr}:${sec} ${dateObject[2]}`;
 }
 const convertDate = ({time})=> {
-    const dateObj = new Date(time);
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth() + 1;
-    const day = dateObj.getDate();
-    return `${day}/${month<9?'0'+month:month}/${year}`;
+    const dateObject = time?.split(", ")[0] || "";
+    return dateObject
   }
 const addStatus = async({type,url,text})=>{
     try{
