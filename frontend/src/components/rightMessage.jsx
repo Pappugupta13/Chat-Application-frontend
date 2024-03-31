@@ -61,10 +61,10 @@ const RightMessage = () => {
         {loading && <Loading />}
         {!loading && !data2.message.length && <NoMessage />}
         {data2.message.length != 'undefined' && !loading && (data2.message.map((item, index) => {
-          const time = convertTime({ time: item.updatedAt });
+          const time = convertTime({ time: item.createdAt });
           const reverse = item.senderId != data2._id;
-          const date = convertDate({ time: item.updatedAt });
-          const isLastDate = date != convertDate({ time:data2.message[index-1]?.updatedAt});
+          const date = convertDate({ time: item.createdAt });
+          const isLastDate = date != convertDate({ time:data2.message[index-1]?.createdAt});
           const isUserOnline = msgid.includes(item._id);
           if(isUserOnline){
             item.seen = true
