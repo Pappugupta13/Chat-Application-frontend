@@ -3,7 +3,7 @@ import '../cssFile/userProfile.css';
 import { selectedChat } from '../context/selectedChat';
 import { useSelectUserId } from '../context/userInfoContext';
 import { usesocketIoContext } from '../context/socketIo'
-const UserProfile = ({ userData, chnage_show }) => {
+const UserProfile = ({ userData, chnage_show,lastMessage }) => {
   const { setdata4 } = useSelectUserId()
   const { onlineUser } = usesocketIoContext()
 
@@ -27,7 +27,7 @@ const UserProfile = ({ userData, chnage_show }) => {
       <img loading='lazy' style={{ outline: userData.status.type && '3px solid red' }} src={userData.profilePic} onClick={chhange_user_info} />
       <div className='User-profile-container-name-last-message'>
         <span className='name'>{userData.fullName}</span>
-        <span className='last-message'>last message</span>
+        <span className='last-message'>{lastMessage}</span>
         
       </div>
       <span className='rocket'>🚀</span>
