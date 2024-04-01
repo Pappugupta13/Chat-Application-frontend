@@ -8,6 +8,12 @@ const Svg = () => {
     )
 }
 
+export const Add = ({AddUser})=>{
+    return(
+        <svg onClick={AddUser} viewBox="0 0 24 24" style={{cursor:'pointer'}} height="30" width="40" preserveAspectRatio="xMidYMid meet" class="" fill="none"><title>Add User for chat</title><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 13.2501L20.5 10.7501L13.25 10.7501L13.25 3.5L10.75 3.5L10.75 10.7501L3.5 10.7501L3.5 13.2501L10.75 13.2501L10.75 20.5L13.25 20.5L13.25 13.2501L20.5 13.2501Z" fill="white"></path></svg>
+    )
+}
+
 export const Seen = ({seen})=>{
     const seens = seen?'blue':'#dc2626';
     return(
