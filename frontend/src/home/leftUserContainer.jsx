@@ -1,8 +1,8 @@
-import React, { useEffect, useState,lazy,Suspense } from 'react'
-const  UserSearch = lazy(()=> import('../components/userSearch'));
-const UserProfile = lazy(()=>import('../components/userProfile'));
+import React, { useEffect, useState, lazy, Suspense } from 'react'
+const UserSearch = lazy(() => import('../components/userSearch'));
+const UserProfile = lazy(() => import('../components/userProfile'));
 import '../cssFile/leftUserContainer.css';
-const ProfileViewer = lazy(()=>import('../components/profileViewer'));
+const ProfileViewer = lazy(() => import('../components/profileViewer'));
 import { useUserContext } from '../context/themeContext';
 import { usesocketIoContext } from '../context/socketIo';
 import { useAuth } from '../context/AuthUser'
@@ -23,12 +23,13 @@ const LeftUserContainer = () => {
   // call the function at once
   useEffect(() => {
     const fetch_data = async () => {
-      const res = await fetch(`${url}/users`, {
+      const res = await fetch(`${url}/users/chatData`, {
         method: 'GET',
         credentials: 'include'
       });
       if (res.ok) {
         const resData = await res.json();
+        console.log(resData)
         setAllUser(resData);
       } else {
         alert("internal server error ");
@@ -50,20 +51,28 @@ const LeftUserContainer = () => {
   return (
     <div className='left-user-container' style={{ backgroundColor: data.leftBg }}>
       <Suspense>
-      {show ? (<ProfileViewer chnage_show={change} />) : (<div><div className='user-search-container'>
-        <UserSearch chnage_show={change} Search_user={Search_user} />
-      </div>
-        <div className='user-scroll'>
-          {allUser.filter((item) => {
-            return search.toLowerCase() == '' ? item : item.fullName.toLowerCase().includes(search.toLowerCase())
-          }).map(
-            (item, index) => {
-              return (
-                <UserProfile key={index} index={index + 1} userData={item} chnage_show={change} />)
+        {show ? (<ProfileViewer chnage_show={change} />) : (<div><div className='user-search-container'>
+          <UserSearch chnage_show={change} Search_user={Search_user} />
+        </div>
+          <div className='user-scroll'>
+            {allUser.map((item, index) =>  (
+
+              <div key={index}>
+                {item?.participants?.filter((item) => {
+                  console.log(item)
+                  return search.toLowerCase() == '' ? item : item.fullName.toLowerCase().includes(search.toLowerCase())
+                }).map((data, index) => {
+                  if (data._id === authuser.id) return;
+                  return (
+                    <UserProfile key={index} index={index + 1} userData={data} lastMessage={item?.latestMessage?.message} chnage_show={change} />
+                  )
+                })
+                }
+              </div>))
+            
             }
-          )}
-        </div></div>)}
-        </Suspense>
+          </div></div>)}
+      </Suspense>
     </div>
   )
 }
