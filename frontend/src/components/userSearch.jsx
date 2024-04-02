@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {Add} from './svg';
 import '../cssFile/userProfile.css';
@@ -20,15 +19,15 @@ const [data,setData] = useState('')
   return (
     <div className='user-search-profile'>
       <img src={authuser?.profilePic} loading='lazy' onClick={chhange_value}/>
-      <input onChange={e=>{Search_user(e.target.value);setData(e.target.value);}} type='text' placeholder='Search User...' value={data}/>
+      <input id='main-search-input-tag' onChange={e=>{Search_user(e.target.value);setData(e.target.value);}} type='text' placeholder='Search User...' value={data}/>
       <Add AddUser={AddUser}/>
-      {showSearch&&<div>
-      <SearchUser/>
-      </div>
+      {showSearch&&
+      <SearchUser AddUser={AddUser}/>
+
 }
-     
     </div>
   )
 }
 
 export default UserSearch;
+
