@@ -15,5 +15,29 @@ const convertSize = (fileSizeInBytes) => {
         return size;
       
 }
+const url = import.meta.env.VITE_APP_API_URL;
+export const searchUser = async (search) => {
+  try{
+    const response = await fetch(`${url}/users`,{
+      method: 'GET',
+      credentials: 'include',
+      body: JSON.stringify({
+        inputValue:search
+    })
+    });
+    const data = await response.json();
+    if(data.error || !data){
+      alert("Something went  wrong!");
+      return console.log("Something went  wrong!");
+    }
+    console.log(data);
+    // return  data;
+  }
+  catch(e){
+    console.log("error "+e);
+    alert("Something went wrong")
+  }
+  
+} 
 
 export default convertSize
