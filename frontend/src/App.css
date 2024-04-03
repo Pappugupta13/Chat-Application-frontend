@@ -9,6 +9,9 @@
   overflow: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+svg{
+  cursor: pointer;
+}
 .message-for-container{
   height: 90vh;
   width: 95vw;
