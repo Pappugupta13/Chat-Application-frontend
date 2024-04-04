@@ -10,4 +10,5 @@ Feature List:
 -   Completely Responsive
 -   Chat App With Image, Audio, Video and Document
 -   Seen/Unseen for Messages
--   Firebase for Storage 
+-   Firebase for Storage
+-   View the user who viewed the status
