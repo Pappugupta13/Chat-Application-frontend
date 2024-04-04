@@ -35,5 +35,22 @@ export const searchUser = async (search) => {
   }
   
 } 
-
+export const statusView = async ()=>{
+  try{
+    const response = await fetch(`${url}/users/statusView`,{
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await response.json();
+    if(data.error || !data){
+      alert("Something went  wrong!");
+      return console.log("Something went  wrong!");
+    }
+    return data;
+  }
+  catch(e){
+    console.log("error "+e);
+    alert("Something went wrong")
+  }
+}
 export default convertSize
