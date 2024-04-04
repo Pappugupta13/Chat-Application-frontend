@@ -2,16 +2,22 @@ import React, { useState } from 'react';
 import '../cssFile/profileViewer.css';
 import StatusTypes from './statusTypes';
 import { getURL } from '../firebase/firebase';
+import {statusView } from '../hooks/convertSize';
 import { addStatus, deleteStatus } from '../hooks/convertTime';
 const Status = ({ status, showAndHide, admin }) => {
-
+    const [seenUser, setSeenUser] = useState([])
     // hook context for adding the status for admin user
     const [data, setDataForStatus] = useState({
         text: '',
         url: '',
         type: ''
     })
+    
 
+    const AddSeenUser = async ()=>{
+         const x = await statusView();
+         setSeenUser(x[0].status)
+    }
     // adding the status for the admin user
     const addStatuss = () => {
 
@@ -28,8 +34,8 @@ const Status = ({ status, showAndHide, admin }) => {
         }
 
         if (file) {
-            alert("please wait few  seconds");
-            const url = await getURL({ name: file.name, size: file.size, file })
+            alert("please wait few seconds");
+            const url = await getURL({ name: file.name, file })
             setDataForStatus({ ...data, type: file.type.split("/")[0], url })
 
         }
@@ -42,8 +48,8 @@ const Status = ({ status, showAndHide, admin }) => {
             </div>
 
             <div style={{ height: '100%' }}>
-                {status.type != null && <StatusTypes content={status} />}
-                {data.type && admin && <StatusTypes content={data} />}
+                {status?.type != null && <StatusTypes AddSeenUser={AddSeenUser} key={`a +${status?.type}`} content={status} />}
+                {data.type && admin && <StatusTypes AddSeenUser={AddSeenUser} key={`b +${admin}`} content={data} />}
                 {(status.type === null || status.type === 'undefined') && admin &&
                     <div className='input-file-select-add-icon'>
                         <label for="file-inputs" style={{ cursor: 'pointer', width: '35px' }}><svg viewBox="0 0 30 22" height="30px" preserveAspectRatio="xMidYMid meet" class="" fill="none"><title>attach-menu-plus</title><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 13.2501L20.5 10.7501L13.25 10.7501L13.25 3.5L10.75 3.5L10.75 10.7501L3.5 10.7501L3.5 13.2501L10.75 13.2501L10.75 20.5L13.25 20.5L13.25 13.2501L20.5 13.2501Z" fill="currentColor"></path></svg></label>
@@ -52,7 +58,15 @@ const Status = ({ status, showAndHide, admin }) => {
                         <button onClick={addStatuss} className='add-the-status'>add</button>
 
                     </div>}
-
+                {seenUser&& <div style={{ height: '300px', width: '100%', backgroundColor: 'red', overflow: 'auto' }}>
+                    {seenUser?.userSeen?.map((item)=>(<div className='User-profile-container'>
+                        <img loading='lazy' src={item.profilePic} />
+                        <div className='User-profile-container-name-last-message'>
+                            <span className='name'>{item.fullName}</span>
+                        </div>
+                    </div> ))}
+                </div>
+}
                 {admin && status.type != null &&
                     <div className='input-file-select-add-icon' style={{ justifyContent: 'space-between' }}>
                         <span className='delete-the-status'>Delete the status</span>
