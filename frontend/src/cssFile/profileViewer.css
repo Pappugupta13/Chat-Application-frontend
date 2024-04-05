@@ -12,12 +12,11 @@
     animation-duration: 0.51s;
     background-color: rgb(149, 144, 195);
 }
+
   @keyframes example {
   0%   {left:-320px; top:0px;}
   100% {left:0; top:0;}
 }
-
-
 .logout-image{
     height: 50px;
      width: 50px;
@@ -76,10 +75,12 @@
    position: absolute;
 }
 .status-container{
-    height: 380px;
+    max-height: 350px;
+    min-height: auto;
     display: grid;
     place-items: center;
-    margin-top: 35px;
+    margin-top: 40px;
+    gap: 5px;
 }
 .status-container img{
     min-height: auto;
