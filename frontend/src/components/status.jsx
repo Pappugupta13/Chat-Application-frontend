@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import '../cssFile/profileViewer.css';
+import Svg from './svg';
 import StatusTypes from './statusTypes';
 import { getURL } from '../firebase/firebase';
-import {statusView } from '../hooks/convertSize';
+import { statusView } from '../hooks/convertSize';
 import { addStatus, deleteStatus } from '../hooks/convertTime';
 const Status = ({ status, showAndHide, admin }) => {
-    const [seenUser, setSeenUser] = useState([])
+    const [seenUser, setSeenUser] = useState([]);
+    const [showTheUser, setshowTheUser] = useState(null)
     // hook context for adding the status for admin user
     const [data, setDataForStatus] = useState({
         text: '',
         url: '',
         type: ''
     })
-    
 
-    const AddSeenUser = async ()=>{
-         const x = await statusView();
-         setSeenUser(x[0].status)
+  
+    const AddSeenUser = async () => {
+            const x = await statusView();
+            setSeenUser(x[0].status);
+            setshowTheUser(true)
     }
     // adding the status for the admin user
     const addStatuss = () => {
@@ -42,7 +45,29 @@ const Status = ({ status, showAndHide, admin }) => {
     };
 
     return (
-        <div className='profile-viewer' style={{ zIndex: 2 }}>
+        <>
+        {/* see the total number of user who has seen your staus */}
+         {showTheUser && <div className='after-total-user-seen'>
+            <div style={{display:'grid',placeItems:'center',backgroundColor:'#FFFFFF'}}>
+                <div style={{display:'flex',alignItems:'center',gap:10,height:'40px',backgroundColor:'#25D366',color:'white',width:'300px',padding:'5px 5px'}}>
+                <svg onClick={e=>setshowTheUser(false)} style={{marginLeft:'10'}} aria-label="Close" class="x1lliihq x1n2onr6 x5n08af"  height="34" role="img" viewBox="0 0 24 24" width="24"><title>Close</title><line  stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="3" y2="21"></line><line  stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="21" y2="3"></line></svg>
+                <span style={{fontSize:20}}>Viewed by</span>
+                </div>
+                <div style={{maxHeight:300,minHeight:0,overflow:'auto'}}>
+                    {seenUser?.userSeen?.map((item) => (<div className='User-profile-container' style={{marginLeft:0}}>
+                        <img loading='lazy' src={item.profilePic} />
+                        <div className='User-profile-container-name-last-message'>
+                            <span className='name'>{item.fullName}</span>
+                        </div>
+                    </div>))}
+                    </div>
+                    </div>
+                </div>}
+
+
+
+       {/* show || add your status  */}
+        <div className='profile-viewer' style={{ zIndex: 2}}>
             <div className='cross-icon-for-profile-viewer' onClick={showAndHide}>
                 <svg aria-label="Close" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Close</title><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="3" y2="21"></line><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="21" y2="3"></line></svg>
             </div>
@@ -58,15 +83,8 @@ const Status = ({ status, showAndHide, admin }) => {
                         <button onClick={addStatuss} className='add-the-status'>add</button>
 
                     </div>}
-                {seenUser&& <div style={{ height: '300px', width: '100%', backgroundColor: 'red', overflow: 'auto' }}>
-                    {seenUser?.userSeen?.map((item)=>(<div className='User-profile-container'>
-                        <img loading='lazy' src={item.profilePic} />
-                        <div className='User-profile-container-name-last-message'>
-                            <span className='name'>{item.fullName}</span>
-                        </div>
-                    </div> ))}
-                </div>
-}
+               
+                
                 {admin && status.type != null &&
                     <div className='input-file-select-add-icon' style={{ justifyContent: 'space-between' }}>
                         <span className='delete-the-status'>Delete the status</span>
@@ -78,6 +96,7 @@ const Status = ({ status, showAndHide, admin }) => {
 
             </div>
         </div>
+        </>
     )
 }
 
