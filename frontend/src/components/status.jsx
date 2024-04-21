@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../cssFile/profileViewer.css';
-import Svg from './svg';
 import StatusTypes from './statusTypes';
 import { getURL } from '../firebase/firebase';
 import { statusView } from '../hooks/convertSize';
@@ -48,7 +47,7 @@ const Status = ({ status, showAndHide, admin }) => {
         <>
         {/* see the total number of user who has seen your staus */}
          {showTheUser && <div className='after-total-user-seen'>
-            <div style={{display:'grid',placeItems:'center',backgroundColor:'#FFFFFF'}}>
+            <div style={{display:'grid',placeItems:'center',backgroundColor:'#FFFFFF',paddingBottom:3}}>
                 <div style={{display:'flex',alignItems:'center',gap:10,height:'40px',backgroundColor:'#25D366',color:'white',width:'300px',padding:'5px 5px'}}>
                 <svg onClick={e=>setshowTheUser(false)} style={{marginLeft:'10'}} aria-label="Close" class="x1lliihq x1n2onr6 x5n08af"  height="34" role="img" viewBox="0 0 24 24" width="24"><title>Close</title><line  stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="3" y2="21"></line><line  stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="21" x2="3" y1="21" y2="3"></line></svg>
                 <span style={{fontSize:20}}>Viewed by</span>
@@ -73,8 +72,9 @@ const Status = ({ status, showAndHide, admin }) => {
             </div>
 
             <div style={{ height: '100%' }}>
-                {status?.type != null && <StatusTypes AddSeenUser={AddSeenUser} key={`a +${status?.type}`} content={status} />}
-                {data.type && admin && <StatusTypes AddSeenUser={AddSeenUser} key={`b +${admin}`} content={data} />}
+                {/* this is calling two times */}
+                {status?.type != null && (<StatusTypes AddSeenUser={AddSeenUser} key={`a +${'dd'}}`} content={status} showSeen={true}/>)}
+                {data.type && admin && <StatusTypes AddSeenUser={AddSeenUser} key={`b +${admin}`} content={data} showSeen={false}/>}
                 {(status.type === null || status.type === 'undefined') && admin &&
                     <div className='input-file-select-add-icon'>
                         <label for="file-inputs" style={{ cursor: 'pointer', width: '35px' }}><svg viewBox="0 0 30 22" height="30px" preserveAspectRatio="xMidYMid meet" class="" fill="none"><title>attach-menu-plus</title><path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 13.2501L20.5 10.7501L13.25 10.7501L13.25 3.5L10.75 3.5L10.75 10.7501L3.5 10.7501L3.5 13.2501L10.75 13.2501L10.75 20.5L13.25 20.5L13.25 13.2501L20.5 13.2501Z" fill="currentColor"></path></svg></label>
