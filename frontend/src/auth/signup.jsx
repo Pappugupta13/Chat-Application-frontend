@@ -11,13 +11,19 @@ const Signup = () => {
     password: ''
   });
    const {setAuthUser} = useAuth();
-  
+
+   const handelData2 = (event)=>{
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      signupHook({data,setAuthUser})
+    }
+  }
   return (
     <div className='signup-container'>
       <span className='login'>Signup</span>
-      <input onChange={e=>setdata({...data,fullName:e.target.value})} type='text' placeholder="Name" value={data.fullName}/>
-      <input onChange={e=>setdata({...data,email:e.target.value})} type='text' placeholder="Email" value={data.email}/>
-      <input onChange={e=>setdata({...data,password:e.target.value})} type='password' placeholder="Password" value={data.password}/>
+      <input onChange={e=>setdata({...data,fullName:e.target.value})} type='text' placeholder="Name" value={data.fullName} onKeyDown={handelData2}/>
+      <input onChange={e=>setdata({...data,email:e.target.value})} type='text' placeholder="Email" value={data.email} onKeyDown={handelData2}/>
+      <input onChange={e=>setdata({...data,password:e.target.value})} type='password' placeholder="Password" value={data.password} onKeyDown={handelData2}/>
       <button onClick={e => signupHook({data,setAuthUser})}>Signup</button>
       {/*  */}
       <hr />
