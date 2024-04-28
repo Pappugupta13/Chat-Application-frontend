@@ -10,11 +10,19 @@ const Login = () => {
     password: ''
   });
   const { setAuthUser } = useAuth();
+
+  const handelData = (event)=>{
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      loginHook({ data, setAuthUser })
+    }
+  }
+  
   return (
     <div className='login-container'>
       <span className='login'>Login</span>
-      <input onChange={e => setdata({ ...data, email: e.target.value })} value={data.email} type='text' placeholder="Username" />
-      <input onChange={e => setdata({ ...data, password: e.target.value })} value={data.password} type='password' placeholder="Password" />
+      <input onChange={e => setdata({ ...data, email: e.target.value })} value={data.email} type='text' placeholder="Username"  onKeyDown={handelData}/>
+      <input onChange={e => setdata({ ...data, password: e.target.value })} value={data.password} type='password' placeholder="Password"  onKeyDown={handelData}/>
       <button onClick={e => loginHook({ data, setAuthUser })}>Login</button>
       <hr />
       <GoogleLogin
