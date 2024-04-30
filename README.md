@@ -1,7 +1,7 @@
 # Chat-Application-frontend
 Feature List:
 
--   Tech stack: MERN Stack and Socket.io 
+-   Tech stack: MERN Stack, Socket.io, Firebase and Docker 
 -   Authentication with JWT
 -   Login and Sign-up with Google
 -   Search the user
