@@ -12,7 +12,7 @@ const RightBottom = () => {
   const { conversation } = getConversation()
   const [datas, setDatas] = useState('');
   const [showPicker, setShowPicker] = useState(false);
-  
+  const [showthemedia, setShowthemedia] = useState(false)
   
   //add emoji to input box
   const onEmojiClick = (event, emojiObject) => {
@@ -65,9 +65,15 @@ const RightBottom = () => {
   return (
     <div className='bottom-right-container' style={{ backgroundColor: data.rightBottom }}>
       <span className='emoji' onClick={() => setShowPicker((val) => !val)}><Emoji/></span>
-      <label for="file-input2" style={{ cursor: 'pointer',width:'35px' }}>
-      <svg width="30" height="30" viewBox="0 0 24.01 24.01" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1.714c5.68 0 10.286 4.605 10.286 10.286 0 5.68-4.605 10.286-10.286 10.286C6.32 22.286 1.714 17.68 1.714 12 1.714 6.32 6.32 1.714 12 1.714zm0 1.715a8.571 8.571 0 100 17.143 8.571 8.571 0 000-17.143zm0 3.428c.473 0 .857.384.857.857v3.429h3.429a.857.857 0 010 1.714h-3.429v3.429a.857.857 0 11-1.714 0v-3.429H7.714a.857.857 0 110-1.714h3.429V7.714c0-.473.384-.857.857-.857z" fill="CurrentColor"></path></svg>
-        </label>
+      {showthemedia && <div className='type-icon-main-container'>
+        <div className='type-icon-container'>
+          <label for="file-input2"><FileIcon />Media </label>
+          <label><GameIcon />Start Game</label>
+        </div>
+      </div>}
+     <label onClick={e => setShowthemedia(!showthemedia)} style={{ cursor: 'pointer', width: '35px' }}>
+        <svg width="30" height="30" viewBox="0 0 24.01 24.01" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1.714c5.68 0 10.286 4.605 10.286 10.286 0 5.68-4.605 10.286-10.286 10.286C6.32 22.286 1.714 17.68 1.714 12 1.714 6.32 6.32 1.714 12 1.714zm0 1.715a8.571 8.571 0 100 17.143 8.571 8.571 0 000-17.143zm0 3.428c.473 0 .857.384.857.857v3.429h3.429a.857.857 0 010 1.714h-3.429v3.429a.857.857 0 11-1.714 0v-3.429H7.714a.857.857 0 110-1.714h3.429V7.714c0-.473.384-.857.857-.857z" fill="CurrentColor"></path></svg>
+      </label>
       <input type='file' id="file-input2" style={{display:"none"}}  onChange={handleImageUpload} onClick={(event)=> {event.target.value = null}} />
       <div className='pickerStyle-container'> {showPicker && (
         <EmojiPicker onEmojiClick={onEmojiClick} />
