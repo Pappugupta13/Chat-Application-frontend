@@ -10,7 +10,7 @@ const RightTopName = () => {
       setdata({
         ...data, leftBg: '#6B7280',
         rightTop: '#374151',
-        rightMessage: '#4C5563',
+        rightMessage: 'rgb(51, 65, 85)',
         rightBottom: '#374151',
         image: 'https://png.pngtree.com/png-clipart/20190517/original/pngtree-vector-sun-icon-png-image_4224147.jpg',
         beforeColor:'#575e6c'
@@ -18,7 +18,7 @@ const RightTopName = () => {
       localStorage.setItem("chat-theme",JSON.stringify({
         ...data, leftBg: '#6B7280',
         rightTop: '#374151',
-        rightMessage: '#4C5563',
+        rightMessage: 'rgb(51, 65, 85)',
         rightBottom: '#374151',
         image: 'https://png.pngtree.com/png-clipart/20190517/original/pngtree-vector-sun-icon-png-image_4224147.jpg',
         beforeColor:'#575e6c'
