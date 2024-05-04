@@ -38,6 +38,12 @@
     gap: 5px;
     margin-bottom: 10px;
 }
+.turn-for-game select{
+    outline: 1px solid blue;
+    border-radius: 5px;
+    font-size: 20px;
+    width: 70px;
+}
 .name-for-game{
     display: flex;
     width: 50vw;
@@ -56,6 +62,7 @@
     -webkit-user-select: none;
     -ms-user-select: none; 
     user-select: none;
+    min-width: 320px;
 }
 .name-for-game{
     display: flex;
