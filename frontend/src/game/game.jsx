@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../cssFile/game.css';
 import { useNavigate } from 'react-router-dom';
+import SearchUser from './searchUser';
 const Game = () => {
     const [board, setBoard] = useState(Array(9).fill(''));
     const [move, setMove] = useState('X');
@@ -18,6 +19,7 @@ const Game = () => {
         return () => clearTimeout(timeoutId);
     }, []);
     const clicked = (n) => {
+        setIsDisabled({...isDisabled,two:true})
         let square = [...board]
         if (board[n] !== '') {
             alert('Already Clicked')
@@ -89,6 +91,8 @@ const Game = () => {
     }
     const navigate = useNavigate();
     return (
+        <>
+        <SearchUser/>
         <div className='container-for-game'>
             <div className='child-container-for-game'>
                 <span className='tic-tac-toe'>Tic-Tac-Toe</span>
@@ -106,7 +110,7 @@ const Game = () => {
                         <span>Opponent: {"Shivansh"}</span>
                     </div>
                     <div className='turn-for-game'>
-                        <span>You are playing as <select onClick={e=>{isDisabled.one % 2 === 0?setIsDisabled({...isDisabled,two:true}):setIsDisabled({...isDisabled,one:2})}}  disabled={isDisabled.two} onChange={e=>{console.log("you have selected "+e.target.value)}}>
+                        <span>You are playing as <select onClick={e=>{isDisabled.one % 2 === 0?setIsDisabled({...isDisabled,two:true}):setIsDisabled({...isDisabled,one:2})}}  disabled={isDisabled.two} onChange={e=>{setMove(e.target.value)}}>
                             <option value="X" >X</option>
                             <option value="Y">Y</option>
                         </select></span>
@@ -133,6 +137,7 @@ const Game = () => {
             </div>
 
         </div>
+        </>
     )
 }
 
