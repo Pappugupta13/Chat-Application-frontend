@@ -1,6 +1,26 @@
+@import url('../cssFile//leftUserContainer.css');
+.name-image-for{
+    width: 100%;
+    min-height: auto;
+    max-height: 250px;
+    overflow: auto;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
 .row{
     display: flex;
     gap: 3px;
+}
+#add-user-in-game{
+    position: absolute;
+    left: 0;
+    top:0;
+    outline: 2px solid green;
+    border: none;
+    margin-top: 5px;
+    font-size: 18px;
+    border-radius: 5px;
+    padding: 5px;
 }
 .row div{
     background-color: #5b55d3;
@@ -53,8 +73,37 @@
     font-size: 25px;
     padding: 0 10px;
 }
+.after-winning-the-game{
+    display: grid;
+    place-items: center;
+    gap: 10px;
+
+}
+.after-winning-the-game button{
+    font-size: 23px;
+    outline: 2px salmon solid ;
+    border:none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.search-user-for-game{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgb(151, 149, 204);
+    width: 270px;
+}
+.search-user-for-game input{
+    padding: 5px;
+    font-size: 20px;
+    outline: 2px black solid ;
+    border:none;
+    border-radius: 3px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
 .container-for-game{
-    background-color: pink;
+    background-color: rgb(186, 179, 242);
     width: 100vw;
     height: 100vh;
     display: grid;
