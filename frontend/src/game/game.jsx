@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../cssFile/game.css';
 import { useNavigate } from 'react-router-dom';
 import SearchUser from './searchUser';
@@ -11,13 +11,6 @@ const Game = () => {
     });
     const [winner, setWinner] = useState(null);
     const userName = JSON.parse(localStorage.getItem('demo-chat-user')).fullName;
-    useEffect(() => {
-        sessionStorage.setItem('myData', 'someValue');
-        const timeoutId = setTimeout(() => {
-            sessionStorage.removeItem('myData');
-        }, 60 * 1000);
-        return () => clearTimeout(timeoutId);
-    }, []);
     const clicked = (n) => {
         setIsDisabled({...isDisabled,two:true})
         let square = [...board]
