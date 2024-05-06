@@ -12,3 +12,4 @@ Feature List:
 -   Seen/Unseen for each Messages
 -   Firebase for Storage
 -   View the user who viewed the status
+-   Play games with friends
