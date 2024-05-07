@@ -3,10 +3,13 @@
   width: 100vw;
   padding: 0;
   margin: 0;
-background-color: #7c8ebc;
+  background-color: #7c8ebc;
   display: grid;
   place-items: center;
   overflow: auto;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 svg{
