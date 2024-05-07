@@ -1,7 +1,6 @@
 .notification-container{
     position: absolute;
     width:200px;
-    height: 300px;
     bottom: 0;
     right: 0;
     background-color: #7c8ebc;
@@ -24,7 +23,8 @@
 }
 .notify-child-container{
    overflow: auto;
-   height:273px;
+   max-height:273px;
+   min-height: auto;
    padding-right: 2px;
 }
 .notify-child-container::-webkit-scrollbar {
