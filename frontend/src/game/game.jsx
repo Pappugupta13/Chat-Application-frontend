@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import '../cssFile/game.css';
 import { useNavigate } from 'react-router-dom';
 import SearchUser from './searchUser';
+import { usesocketIoContext } from '../context/socketIo';
+import Notification from './notification';
 const Game = () => {
+    const { socket } = usesocketIoContext();
     const [board, setBoard] = useState(Array(9).fill(''));
     const [move, setMove] = useState('X');
     const [isDisabled, setIsDisabled] = useState({
@@ -11,8 +14,14 @@ const Game = () => {
     });
     const [winner, setWinner] = useState(null);
     const userName = JSON.parse(localStorage.getItem('demo-chat-user')).fullName;
+    useEffect(()=>{
+    socket?.emit("joinGame",{"name":userName})
+    },[])
+
+    
     const clicked = (n) => {
-        setIsDisabled({...isDisabled,two:true})
+        setIsDisabled({...isDisabled,two:true});
+        socket?.emit("playGame",{"move":n})
         let square = [...board]
         if (board[n] !== '') {
             alert('Already Clicked')
@@ -28,6 +37,7 @@ const Game = () => {
         if (isWin(square)) {
             square.fill('');
             setBoard(Array(9).fill(''))
+            setIsDisabled({...isDisabled,two:false})
 
         }
         if (isDraw(square)) {
@@ -35,6 +45,7 @@ const Game = () => {
             square.fill('');
             setMove('X');
             setBoard(Array(9).fill(''))
+            setIsDisabled({...isDisabled,two:false})
         }
 
     }
@@ -81,11 +92,15 @@ const Game = () => {
         setBoard(Array(9).fill(''));
         setMove("X");
         setWinner(null);
+        setIsDisabled({...isDisabled,one:1,two:false})
     }
     const navigate = useNavigate();
     return (
         <>
-        <SearchUser/>
+        {!isDisabled.two&&<>
+        <SearchUser />
+        <Notification/></>
+        }
         <div className='container-for-game'>
             <div className='child-container-for-game'>
                 <span className='tic-tac-toe'>Tic-Tac-Toe</span>
