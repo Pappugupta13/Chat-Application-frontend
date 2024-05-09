@@ -22,9 +22,10 @@ const Status = ({ status, showAndHide, admin }) => {
     }
     // adding the status for the admin user
     const addStatuss = () => {
-
+      if(data.type){
         addStatus({ text: data.text, url: data.url, type: data.type })
-        // setDataForStatus({...data,url:'',type:'',text:''})
+      }
+        
     }
 
     // add status either video and image and converts into base64 data
