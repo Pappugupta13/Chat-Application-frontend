@@ -1,16 +1,14 @@
 import React,{useRef} from 'react'
 import '../cssFile/userProfile.css';
-import { usesocketIoContext } from '../context/socketIo';
 import sent from '../image/invite.png';
+import {startgame} from '../hooks/startgame'
 const RequestUser = ({userData,updateSent,sentinvite}) => {
-  const { socket } = usesocketIoContext();
   const isSame = useRef(null)
+  const {request} = startgame()
    const isTrue = sentinvite.includes(userData._id)
    if(isTrue && isSame.current !== userData._id){
-    isSame.current = userData._id
-    const {fullName,profilePic} = JSON.parse(localStorage.getItem('demo-chat-user'));
-    socket?.emit("request",{id:userData._id,reqName:fullName,profilePic});
-   
+    isSame.current = userData._id;
+    request({requestUserId:userData._id})
    }
   return (
     <div className='User-profile-container' style={{width:'235px',height:'30px'}} onClick={e=>updateSent({_id:userData._id})}>
