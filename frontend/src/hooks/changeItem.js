@@ -37,12 +37,14 @@ const changeLocalStorage = async () => {
             if(data.error){
                 alert("invalid data")
                 localStorage.removeItem("demo-chat-user");
+                localStorage.removeItem("chat-theme");
                 return location.reload();
             }
         }
         else{
             alert("invalid data")
             localStorage.removeItem("demo-chat-user");
+            localStorage.removeItem("chat-theme");
             location.reload();
             
         }
