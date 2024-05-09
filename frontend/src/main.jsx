@@ -8,6 +8,7 @@ import SelectedChat from './context/selectedChat.jsx';
 import AuthUserContextext from './context/AuthUser.jsx';
 import UserInfoContext from './context/userInfoContext.jsx';
 import SocketIoProvider from './context/socketIo.jsx'
+import GameContextProvider from './context/gameContext.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeContext>
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <UserInfoContext>
             <GoogleOAuthProvider clientId="748402825183-fblvvikkna0aur9cltvrds329ralamdc.apps.googleusercontent.com">
               <SocketIoProvider>
-                <App />
+                <GameContextProvider>
+                  <App />
+                </GameContextProvider>
               </SocketIoProvider>
             </GoogleOAuthProvider>
           </UserInfoContext>
