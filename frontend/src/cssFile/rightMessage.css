@@ -41,7 +41,7 @@
     background-color: #c4b5fd;
     width: 280px;
     padding: 7px 3px;
-    border-radius: 10px;
+    border-radius: 6px;
 }
 
 .name-and-size {
@@ -50,7 +50,13 @@
     overflow: hidden;
     padding: 0;
 }
-
+.child-text-message-user-info a{
+    text-decoration: none;
+    font-size: 20px;
+}
+.child-text-message-user-info a:hover{
+  text-decoration: underline;
+}
 .name-and-size .name {
     font-size: 25px;
     width: 180px;
@@ -140,7 +146,7 @@
 
 .Message-container {
     background-image: url('../image/image.png');
-    background-size: 250px;
+    background-size: 300px;
     overflow-y: scroll;
     height: calc(100% - 110px);
     padding: 0 30px;
