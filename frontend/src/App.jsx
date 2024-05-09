@@ -6,13 +6,15 @@ import LeftUserContainer from './home/leftUserContainer';
 import RightUserContainer from './home/RightUserContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { selectedChat } from './context/selectedChat'
-import BeforeSelectChat from './components/beforeSelectChat'
+import BeforeSelectChat from './components/beforeSelectChat';
+import Notification from './game/notification';
 import { useAuth } from './context/AuthUser';
 function App() {
   const { data2 } = selectedChat();
   const { authuser } = useAuth();
   return (
     <div className='container'>
+      <Notification/>
       <Suspense>
         <Router>
           <Routes>
