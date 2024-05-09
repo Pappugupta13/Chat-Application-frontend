@@ -1,4 +1,4 @@
-import React, { lazy, Suspense,useEffect} from 'react'
+import React, { lazy, Suspense} from 'react'
 import './App.css'
 const Login = lazy(() => import('./auth/login'));
 const Signup = lazy(() => import('./auth/signup'));
@@ -6,9 +6,10 @@ import LeftUserContainer from './home/leftUserContainer';
 import RightUserContainer from './home/RightUserContainer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { selectedChat } from './context/selectedChat'
-import BeforeSelectChat from './components/beforeSelectChat';
-import Notification from './game/notification';
+import BeforeSelectChat from './components/beforeSelectChat'
 import { useAuth } from './context/AuthUser';
+import Notification from './game/notification';
+import Game from './game/game';
 function App() {
   const { data2 } = selectedChat();
   const { authuser } = useAuth();
@@ -25,7 +26,7 @@ function App() {
                 <LeftUserContainer />
                 {data2?.fullName ? <RightUserContainer /> : <BeforeSelectChat />}
               </div> : <Navigate to="/" />} />
-
+             <Route path="/game" element={authuser?<Game/>:<Navigate to="/" />}/>
           </Routes>
         </Router>
       </Suspense>
