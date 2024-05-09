@@ -1,144 +1,58 @@
-import React, { useState,useEffect} from 'react';
+import React from 'react';
 import '../cssFile/game.css';
+import {startgame} from "../hooks/startgame";
+import { useGameContext} from '../context/gameContext'
 import { useNavigate } from 'react-router-dom';
 import SearchUser from './searchUser';
-import { usesocketIoContext } from '../context/socketIo';
 import Notification from './notification';
 const Game = () => {
-    const { socket } = usesocketIoContext();
-    const [board, setBoard] = useState(Array(9).fill(''));
-    const [move, setMove] = useState('X');
-    const [isDisabled, setIsDisabled] = useState({
-        one: 1,
-        two: false,
-    });
-    const [winner, setWinner] = useState(null);
-    const userName = JSON.parse(localStorage.getItem('demo-chat-user')).fullName;
-    useEffect(()=>{
-    socket?.emit("joinGame",{"name":userName})
-    },[])
-
-    
-    const clicked = (n) => {
-        setIsDisabled({...isDisabled,two:true});
-        socket?.emit("playGame",{"move":n})
-        let square = [...board]
-        if (board[n] !== '') {
-            alert('Already Clicked')
-            return
-        }
-        square[n] = move;
-        setBoard(square)
-        if (move === 'X') {
-            setMove('O')
-        } else {
-            setMove('X')
-        }
-        if (isWin(square)) {
-            square.fill('');
-            setBoard(Array(9).fill(''))
-            setIsDisabled({...isDisabled,two:false})
-
-        }
-        if (isDraw(square)) {
-            alert("Match Draw")
-            square.fill('');
-            setMove('X');
-            setBoard(Array(9).fill(''))
-            setIsDisabled({...isDisabled,two:false})
-        }
-
-    }
-    const isDraw = (board) => {
-        let count = 0;
-        board.forEach(element => {
-            if (element !== '') {
-                count++;
-            }
-        });
-
-        if (count >= 9) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    const isWin = (board) => {
-        const conditions = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ]
-
-        let flag = false;
-        conditions.forEach(element => {
-            if (board[element[0]] !== '' && board[element[1]] !== '' && board[element[2]] !== '') {
-                if (board[element[0]] === board[element[1]] && board[element[1]] === board[element[2]]) {
-                    setWinner(board[element[0]]);
-                    flag = true;
-                    console.log(board[element[0]])
-
-                }
-            }
-        });
-        return flag;
-    }
-    const resetgame = () => {
-        setBoard(Array(9).fill(''));
-        setMove("X");
-        setWinner(null);
-        setIsDisabled({...isDisabled,one:1,two:false})
-    }
+    const {clicked,isDisabled,setIsDisabled,resetgame,fullName,changeMove} = startgame()
+    const {game} = useGameContext()
     const navigate = useNavigate();
     return (
         <>
-        {!isDisabled.two&&<>
+        {isDisabled.three&&<>
         <SearchUser />
         <Notification/></>
         }
         <div className='container-for-game'>
             <div className='child-container-for-game'>
                 <span className='tic-tac-toe'>Tic-Tac-Toe</span>
-                {winner &&
+                {game.winner &&
                     <div className='after-winning-the-game'>
-                        <span style={{ fontSize: 20 }}>{winner} opponent won the match</span>
+                        <span style={{ fontSize: 20 }}>{game.winner} opponent won the match</span>
                         <div style={{ display: 'flex', gap: 10 }}>
                             <button onClick={e => navigate('/home')}>Go to Chat</button>
                             <button onClick={resetgame}>Start new game</button>
                         </div>
                     </div>}
-                {!winner && <>
+                {!game.winner && <>
                     <div className='name-for-game'>
-                        <span style={{ marginRight: 10 }}>You: {userName}</span>
+                        <span style={{ marginRight: 10 }}>You: {fullName}</span>
                         <span>Opponent: {"Shivansh"}</span>
                     </div>
                     <div className='turn-for-game'>
-                        <span>You are playing as <select onClick={e=>{isDisabled.one % 2 === 0?setIsDisabled({...isDisabled,two:true}):setIsDisabled({...isDisabled,one:2})}}  disabled={isDisabled.two} onChange={e=>{setMove(e.target.value)}}>
+                        <span>You are playing as <select onClick={e=>{isDisabled.one % 2 === 0?setIsDisabled({...isDisabled,two:true}):setIsDisabled({...isDisabled,one:2})}}  disabled={isDisabled.two} onChange={e=>{changeMove(e.target.value)}}>
                             <option value="X" >X</option>
-                            <option value="Y">Y</option>
+                            <option value="O">O</option>
                         </select></span>
-                        <span>{move}'s Turn</span>
+                        <span>{game.move}'s Turn</span>
                     </div>
                     <div className='child-game'>
                         <div className='row'>
-                            <div onClick={e => clicked(0)}>{board[0]}</div>
-                            <div onClick={e => clicked(1)}>{board[1]}</div>
-                            <div onClick={e => clicked(2)}>{board[2]}</div>
+                            <div onClick={e => clicked(0)}>{game.board[0]}</div>
+                            <div onClick={e => clicked(1)}>{game.board[1]}</div>
+                            <div onClick={e => clicked(2)}>{game.board[2]}</div>
                         </div>
                         <div className='row'>
-                            <div onClick={e => clicked(3)}>{board[3]}</div>
-                            <div onClick={e => clicked(4)}>{board[4]}</div>
-                            <div onClick={e => clicked(5)}>{board[5]}</div>
+                            <div onClick={e => clicked(3)}>{game.board[3]}</div>
+                            <div onClick={e => clicked(4)}>{game.board[4]}</div>
+                            <div onClick={e => clicked(5)}>{game.board[5]}</div>
                         </div>
                         <div className='row'>
-                            <div onClick={e => clicked(6)}>{board[6]}</div>
-                            <div onClick={e => clicked(7)}>{board[7]}</div>
-                            <div onClick={e => clicked(8)}>{board[8]}</div>
+                            <div onClick={e => clicked(6)}>{game.board[6]}</div>
+                            <div onClick={e => clicked(7)}>{game.board[7]}</div>
+                            <div onClick={e => clicked(8)}>{game.board[8]}</div>
                         </div>
                     </div>
                 </>}
