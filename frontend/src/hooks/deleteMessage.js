@@ -19,7 +19,6 @@ const DeletingTheMessage = () => {
       }
       setdata2((prevData2) => {
         const messageIndex = prevData2.message.findIndex(item => item._id === messageId);
-        console.log(messageIndex)
         if (messageIndex !== -1) {
             return ({
                 ...prevData2,
