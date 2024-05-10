@@ -6,18 +6,18 @@ import {startgame} from '../hooks/startgame';
 import { usesocketIoContext } from '../context/socketIo';
 const Notification = () => {
   const {game,setGame} = useGameContext();
- const {isAcceptORCancel,hideShow} = startgame()
+ const {isAcceptORCancel,hideShow,isCancel} = startgame()
   const { socket } = usesocketIoContext();
   useEffect(() => {
-    if(game.show){
+    if (game.opponent == null){
       socket?.on("isrequest", async ({ name, profilePic, id }) => {
-        setGame(prevState => ({ ...prevState, notification:true, notifiyUser: [...game.notifiyUser, { name, profilePic, id }] }));
+        setGame(prevState => ({ ...prevState, notification:true, notifiyUser: [...game.notifiyUser, ...[{ name, profilePic, id }]] }));
       })
-    }
     return () => {
       socket?.off("isrequest")
     }
-  }, [socket])
+  }
+  }, [socket,game])
   return (
     <>
       <div className='main-container-for-animation'>
@@ -32,12 +32,12 @@ const Notification = () => {
                 <div className='User-profile-container-name-last-message'>
                   <img src={item.profilePic} />
                   <span className='last-message' style={{ fontSize: 17, width: 110, color: 'black' }}>{item.name}</span>
-                  <label onClick={3}><Cross height={15} width={15} /></label>
+                  <label onClick={e => isCancel({isyes:"No",requesteduserid: item.id})}><Cross height={15} width={15} /></label>
                 </div>
               </div>
               <div className='button-container'>
                 <button onClick={e => isAcceptORCancel({ isyes: "yes", requesteduserid: item.id,opponentName:item.name})}>Yes</button>
-                <button onClick={e => isAcceptORCancel("No")}>No</button>
+                <button onClick={e => isCancel({isyes:"No",requesteduserid: item.id})}>No</button>
               </div>
             </div>))}
           </div>
