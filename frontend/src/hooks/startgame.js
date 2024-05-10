@@ -1,17 +1,18 @@
 import { useGameContext } from '../context/gameContext';
 import { usesocketIoContext } from '../context/socketIo';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const startgame = () => {
     const { game, setGame } = useGameContext();
+    const navigate = useNavigate();
     const { socket } = usesocketIoContext();
-    const { fullName, profilePic, id } = JSON.parse(localStorage.getItem("demo-chat-user"))
+    const { fullName, profilePic } = JSON.parse(localStorage.getItem("demo-chat-user"));
     const [isDisabled, setIsDisabled] = useState({
         one: 1,
-        two: false,
-        three:true
+        two: false
     });
     const clicked = async (n) => {
-        isDisabled.three&&setIsDisabled({ ...isDisabled, two: true,three:false});
+        !isDisabled.two && setIsDisabled({ ...isDisabled, two: true });
         // socket?.emit("playGame",{"move":n})
         const square = [...game.board];
         if (game.board[n] !== '') {
@@ -20,7 +21,7 @@ export const startgame = () => {
         }
         square[n] = game.move;
         const nextMove = game.move === 'X' ? 'O' : 'X';
-        setGame({ ...game, board: square, move: nextMove });
+        setGame({ ...game, board: square, move: nextMove, show: false, notification: false });
         if (isWin(square)) {
             square.fill('');
         }
@@ -31,6 +32,7 @@ export const startgame = () => {
         }
 
     }
+    // check if draw the match
     const isDraw = (board) => {
         let count = 0;
         board.forEach(element => {
@@ -44,6 +46,7 @@ export const startgame = () => {
             return false;
         }
     }
+    // check if user has won or not 
     const isWin = (board) => {
         const conditions = [
             [0, 1, 2],
@@ -59,25 +62,44 @@ export const startgame = () => {
         conditions.forEach(element => {
             if (board[element[0]] !== '' && board[element[1]] !== '' && board[element[2]] !== '') {
                 if (board[element[0]] === board[element[1]] && board[element[1]] === board[element[2]]) {
-                    setGame({...game,winner:board[element[0]]})
+                    setGame({ ...game, winner: board[element[0]] })
                     flag = true;
                 }
             }
         });
         return flag;
     }
+    // reset the game 
     const resetgame = () => {
-        setGame({ ...game, board: Array(9).fill(''), move: "X",winner:null})
-        setIsDisabled({ ...isDisabled, one: 1, two: false,three:true})
+        setGame({ ...game, board: Array(9).fill(''), move: "X", winner: null, show: true })
+        setIsDisabled({ ...isDisabled, one: 1, two: false })
     }
+    // change to move from x to o and viceversa
     const changeMove = (newMove) => {
         setGame({ ...game, move: newMove });
     };
-const request = ({requestUserId})=>{
-    socket?.emit("request",{id:requestUserId,reqName:fullName,profilePic});
-}
-
-    return { clicked, isDisabled, setIsDisabled, resetgame, fullName, profilePic,changeMove,request}
+    // someone has requested to join the game 
+    const request = ({ requestUserId }) => {
+        socket?.emit("request", { id: requestUserId, reqName: fullName, profilePic });
+    }
+    // either user has accept request or not
+    const isAcceptORCancel = async ({ isyes, requesteduserid, opponentName }) => {
+        if (isyes === "yes") {
+            socket?.emit("isAccept", { istrue: "yes", requesteduserid, Name: fullName });
+            const urlPath = window.location.pathname;
+            if (urlPath === '/home') {
+                navigate('/game');
+            }
+            setGame({ ...game, notification: false, show: false,opponent:opponentName})
+        }
+    }
+    //   hide and show the notification panel 
+    const hideShow = ({ which }) => {
+        if (which === "parent") {
+            setGame(prevState => ({ ...prevState, notification: false }))
+        }
+    }
+    return { clicked, isDisabled, setIsDisabled, resetgame, fullName, profilePic, changeMove, request, isAcceptORCancel, hideShow}
 
 }
 
