@@ -71,7 +71,15 @@ export const startgame = () => {
     }
     // reset the game 
     const resetgame = () => {
-        setGame({ ...game, board: Array(9).fill(''), move: "X", winner: null, show: true })
+        setGame({ ...game,
+        board:Array(9).fill(''),
+        move:"X",
+        winner:null,
+        show:true,
+        notification:true,
+        notifiyUser:[],
+        opponent:null
+         })
         setIsDisabled({ ...isDisabled, one: 1, two: false })
     }
     // change to move from x to o and viceversa
@@ -93,13 +101,27 @@ export const startgame = () => {
             setGame({ ...game, notification: false, show: false,opponent:opponentName})
         }
     }
+    const isCancel = async ({ isyes,requesteduserid}) => {
+        if (isyes === "No") {
+            setGame((prevData) => {
+                const messageIndex = prevData.notifiyUser.findIndex(item => item.id === requesteduserid);
+                console.log(messageIndex)
+                if (messageIndex !== -1) {
+                    return ({
+                        ...prevData,
+                        notifiyUser: prevData.notifiyUser.slice(0, messageIndex).concat(prevData.notifiyUser.slice(messageIndex + 1)),
+                    });
+                }
+            })
+        }
+    }
     //   hide and show the notification panel 
     const hideShow = ({ which }) => {
         if (which === "parent") {
             setGame(prevState => ({ ...prevState, notification: false }))
         }
     }
-    return { clicked, isDisabled, setIsDisabled, resetgame, fullName, profilePic, changeMove, request, isAcceptORCancel, hideShow}
+    return { clicked, isDisabled, setIsDisabled, resetgame, fullName, profilePic, changeMove, request, isAcceptORCancel, hideShow,isCancel}
 
 }
 
