@@ -15,9 +15,9 @@ function App() {
   const { authuser } = useAuth();
   return (
     <div className='container'>
-      <Notification/>
       <Suspense>
         <Router>
+            {authuser&&<Notification/>}
           <Routes>
             <Route path="/" element={authuser ? <Navigate to="/home" /> : <Login />} />
             <Route path="/signup" element={!authuser ? <Signup /> : <Navigate to="/home" />} />
