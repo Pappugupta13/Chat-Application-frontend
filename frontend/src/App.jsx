@@ -10,14 +10,16 @@ import BeforeSelectChat from './components/beforeSelectChat'
 import { useAuth } from './context/AuthUser';
 import Notification from './game/notification';
 import Game from './game/game';
+import { useGameContext } from './context/gameContext';
 function App() {
   const { data2 } = selectedChat();
   const { authuser } = useAuth();
+  const {game} = useGameContext()
   return (
     <div className='container'>
       <Suspense>
         <Router>
-            {authuser&&<Notification/>}
+        {authuser&&game.opponent=== null&&<Notification/>}
           <Routes>
             <Route path="/" element={authuser ? <Navigate to="/home" /> : <Login />} />
             <Route path="/signup" element={!authuser ? <Signup /> : <Navigate to="/home" />} />
