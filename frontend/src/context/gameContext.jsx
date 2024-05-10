@@ -8,7 +8,10 @@ const GameContextProvider = ({ children }) => {
         board:Array(9).fill(''),
         move:"X",
         winner:null,
-        show:false,
+        show:true,
+        notification:true,
+        notifiyUser:[],
+        opponent:null
     })
   
     return (
