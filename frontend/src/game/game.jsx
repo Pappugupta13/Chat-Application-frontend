@@ -11,11 +11,34 @@ const Game = () => {
     const navigate = useNavigate();
     const { socket } = usesocketIoContext();
     useEffect(() => {
-        socket?.on("startplay", async ({ name }) => {
-            setGame(prevState => ({ ...prevState, opponent: name ,show:false,notification:false}))
+        socket?.on("startplay", async ({ name,id}) => {
+            setGame(prevState => ({ ...prevState,board:Array(9).fill(""), opponent: {name,id} ,show:false,notification:false}))
+        }) 
+        socket?.on("moveposition", async ({move}) => {
+            clicked(move);
+            if(!localStorage.getItem("ftm")){
+                localStorage.setItem("ftm",game.move)
+            }       
+        })
+        socket?.on("isDrawWin", async ({data})=>{
+            if(data?.draw === "yes"){
+                resetgame();
+            }
+            else if(data?.winner){
+                const ftm = localStorage.getItem("ftm");
+                if (data?.winner === ftm){
+                    setGame({...game,winner:game.opponent.name})
+
+                }
+                else{
+                    setGame({...game,winner:fullName})
+                }
+                resetgame();
+            }
         })
         return () => {
-            socket?.off("startplay")
+            socket?.off("startplay");
+            socket?.off("moveposition");
         }
     }, [socket])
     return (
@@ -35,7 +58,7 @@ const Game = () => {
                     {!game.winner && <>
                         <div className='name-for-game'>
                             <span style={{ marginRight: 10 }}>You: {fullName}</span>
-                            {game.opponent&&<span>Opponent: {game.opponent}</span>}
+                            {game.opponent.name&&<span>Opponent: {game.opponent.name}</span>}
                         </div>
                         <div className='turn-for-game'>
                             <span>You are playing as <select onClick={e => { isDisabled.one % 2 === 0 ? setIsDisabled({ ...isDisabled, two: true }) : setIsDisabled({ ...isDisabled, one: 2 }) }} disabled={isDisabled.two} onChange={e => { changeMove(e.target.value) }}>
