@@ -9,7 +9,7 @@ const Notification = () => {
  const {isAcceptORCancel,hideShow,isCancel} = startgame()
   const { socket } = usesocketIoContext();
   useEffect(() => {
-    if (game.opponent == null){
+    if (game.opponent.name == null){
       socket?.on("isrequest", async ({ name, profilePic, id }) => {
         setGame(prevState => ({ ...prevState, notification:true, notifiyUser: [...game.notifiyUser, ...[{ name, profilePic, id }]] }));
       })
