@@ -9,7 +9,8 @@
 }
 .row{
     display: flex;
-    gap: 3px;
+    gap: 1.5px;
+    
 }
 #add-user-in-game{
     position: absolute;
@@ -23,22 +24,25 @@
     padding: 5px;
 }
 .row div{
-    background-color: #5b55d3;
-    color: white;
+    background-color:white;
+    color: black;
     height: 90px;
     width: 90px;
     display: grid;
     place-items: center;
-    font-size: 35px;
+    font-size: 60px;
     border-radius: 10px;
-    outline: 2px solid black;
+    border: 5px solid black;
 }
 .row div:hover{
-    background-color: #8d88e1;
+    background-color: #4b23e9;
+    color: white;
 }
 .child-game{
     display: grid;
-    gap: 3px;
+    gap: 1.5px;
+    padding: 5px;
+    border-radius: 10px;
 }
 .child-container-for-game{
     display: grid;
@@ -59,7 +63,8 @@
     margin-bottom: 10px;
 }
 .turn-for-game select{
-    outline: 1px solid blue;
+    outline: none;
+    border: none;
     border-radius: 5px;
     font-size: 20px;
     width: 70px;
@@ -68,10 +73,21 @@
     display: flex;
     width: 50vw;
     flex-wrap: wrap;
+    gap: 5px;
     margin: 5px 0;
     justify-content: space-between;
     font-size: 25px;
     padding: 0 10px;
+}
+.name-for-game >span{
+    background-color: rgb(245, 227, 216);
+    padding: 0 5px;
+    width: 230px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .after-winning-the-game{
     display: grid;
@@ -90,8 +106,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgb(151, 149, 204);
+    background-color:rgba(231, 231, 234, 0.9);
     width: 270px;
+    border-radius: 5px;
 }
 .search-user-for-game input{
     padding: 5px;
@@ -103,7 +120,8 @@
     margin-left: 5px;
 }
 .container-for-game{
-    background-color: rgb(186, 179, 242);
+    background-image: url("../image/image.png");
+    background-size: 200px;
     width: 100vw;
     height: 100vh;
     display: grid;
