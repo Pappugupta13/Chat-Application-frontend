@@ -1,7 +1,7 @@
 import { useGameContext } from '../context/gameContext';
 import { usesocketIoContext } from '../context/socketIo';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import {useState } from 'react';
 export const startgame = () => {
     const { game, setGame } = useGameContext();
     const navigate = useNavigate();
@@ -11,26 +11,48 @@ export const startgame = () => {
         one: 1,
         two: false
     });
-    const clicked = async (n) => {
+   const [opp,setopp] = useState('')
+    const clicked = async (n) => {  
+        console.log(opp)  
         !isDisabled.two && setIsDisabled({ ...isDisabled, two: true });
-        // socket?.emit("playGame",{"move":n})
+        if(game.opponent.id){
+            socket?.emit("playGame",{"move":n,opponentid:game.opponent.id})
+            setGame(previous=>({...previous,isYourtime:false}))
+        }   
+        if(!isDisabled.two){
+             localStorage.setItem("ftm",game.move)
+        }
         const square = [...game.board];
         if (game.board[n] !== '') {
             alert('Already Clicked')
             return
         }
         square[n] = game.move;
-        const nextMove = game.move === 'X' ? 'O' : 'X';
-        setGame({ ...game, board: square, move: nextMove, show: false, notification: false });
+        let nextMove = game.move === 'X' ? 'O' : 'X'; 
+        setGame((prevGameState) => ({
+            ...prevGameState,
+            board: [...prevGameState.board].slice(0, n).concat(game.move).concat(...prevGameState.board.slice(n + 1)),
+            move: nextMove,
+          }));
         if (isWin(square)) {
             square.fill('');
+            const ftm = localStorage.getItem("ftm");
+            socket?.emit("winordraw",{data:{winner:ftm},id:game.opponent.id})
+            if (data?.winner === ftm){
+                setGame({...game,winner:fullName})
+            }
+            else{
+             
+                setGame({...game,winner:game.opponent.name})
+            }
         }
         if (isDraw(square)) {
             alert("Match Draw")
             square.fill('');
+            socket?.emit("winordraw",{data:{draw:"yes"},id:game.opponent.id})
             resetgame();
-        }
 
+        }
     }
     // check if draw the match
     const isDraw = (board) => {
@@ -78,9 +100,11 @@ export const startgame = () => {
         show:true,
         notification:true,
         notifiyUser:[],
-        opponent:null
+        opponent:{name:null,id:null},
+        isYourtime:true
          })
-        setIsDisabled({ ...isDisabled, one: 1, two: false })
+        setIsDisabled({ ...isDisabled, one: 1, two: false });
+        localStorage.removeItem("ftm")
     }
     // change to move from x to o and viceversa
     const changeMove = (newMove) => {
@@ -91,14 +115,17 @@ export const startgame = () => {
         socket?.emit("request", { id: requestUserId, reqName: fullName, profilePic });
     }
     // either user has accept request or not
-    const isAcceptORCancel = async ({ isyes, requesteduserid, opponentName }) => {
+    const isAcceptORCancel = async ({ isyes, requesteduserid, opponentName}) => {
         if (isyes === "yes") {
             socket?.emit("isAccept", { istrue: "yes", requesteduserid, Name: fullName });
             const urlPath = window.location.pathname;
             if (urlPath === '/home') {
                 navigate('/game');
             }
-            setGame({ ...game, notification: false, show: false,opponent:opponentName})
+            // console.log(requesteduserid,)
+            // console.log({ requesteduserid,})
+            setopp( opponentName)
+            setGame({ ...game,board:Array(9).fill(""), notification: false, isYourtime:false,show: false,opponent:{name:opponentName,id:requesteduserid}})
         }
     }
     const isCancel = async ({ isyes,requesteduserid}) => {
