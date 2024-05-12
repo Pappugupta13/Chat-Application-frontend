@@ -11,7 +11,8 @@ const GameContextProvider = ({ children }) => {
         show:true,
         notification:true,
         notifiyUser:[],
-        opponent:{name:null,id:null}
+        opponent:{name:null,id:null},
+        isYourtime:true
     })
   
     return (
