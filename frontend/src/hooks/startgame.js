@@ -1,7 +1,7 @@
 import { useGameContext } from '../context/gameContext';
 import { usesocketIoContext } from '../context/socketIo';
 import { useNavigate } from 'react-router-dom';
-import {useState } from 'react';
+import {useState,useEffect} from 'react';
 export const startgame = () => {
     const { game, setGame } = useGameContext();
     const navigate = useNavigate();
@@ -11,40 +11,41 @@ export const startgame = () => {
         one: 1,
         two: false
     });
-   const [opp,setopp] = useState('')
-    const clicked = async (n) => {  
-        console.log(opp)  
+    useEffect(()=>{
+        localStorage.removeItem("opp");
+        localStorage.removeItem("ftm");
+    },[])
+    // ftm :- first time move
+    // opp :- opponent
+     const opp = localStorage.getItem("opp")
+    const clicked = async (n,o) => {  
         !isDisabled.two && setIsDisabled({ ...isDisabled, two: true });
         if(game.opponent.id){
             socket?.emit("playGame",{"move":n,opponentid:game.opponent.id})
             setGame(previous=>({...previous,isYourtime:false}))
         }   
-        if(!isDisabled.two){
-             localStorage.setItem("ftm",game.move)
-        }
         const square = [...game.board];
         if (game.board[n] !== '') {
             alert('Already Clicked')
             return
         }
-        square[n] = game.move;
-        let nextMove = game.move === 'X' ? 'O' : 'X'; 
+        let putmove;
+        if(o){
+            const ftm = localStorage.getItem("ftm");
+            putmove = ftm === "X"?"O":"X";
+        }
+        else{
+            putmove = game.move;
+        }
+        square[n] = putmove;
+        let nextMove = putmove === 'X' ? 'O' : 'X'; 
         setGame((prevGameState) => ({
             ...prevGameState,
-            board: [...prevGameState.board].slice(0, n).concat(game.move).concat(...prevGameState.board.slice(n + 1)),
+            board: [...prevGameState.board].slice(0, n).concat(putmove).concat(...prevGameState.board.slice(n + 1)),
             move: nextMove,
           }));
         if (isWin(square)) {
             square.fill('');
-            const ftm = localStorage.getItem("ftm");
-            socket?.emit("winordraw",{data:{winner:ftm},id:game.opponent.id})
-            if (data?.winner === ftm){
-                setGame({...game,winner:fullName})
-            }
-            else{
-             
-                setGame({...game,winner:game.opponent.name})
-            }
         }
         if (isDraw(square)) {
             alert("Match Draw")
@@ -83,8 +84,19 @@ export const startgame = () => {
         let flag = false;
         conditions.forEach(element => {
             if (board[element[0]] !== '' && board[element[1]] !== '' && board[element[2]] !== '') {
-                if (board[element[0]] === board[element[1]] && board[element[1]] === board[element[2]]) {
-                    setGame({ ...game, winner: board[element[0]] })
+                if (board[element[0]] === board[element[1]] && board[element[1]] === board[element[2]]) { 
+                    const ftm = localStorage.getItem("ftm"); 
+                    if ((board[element[0]] === ftm)&&opp){
+                        socket?.emit("winordraw",{data:{winner:fullName},id:game.opponent.id})
+                        setGame({...game,winner:fullName})
+                    }
+                    else if(opp){
+                        socket?.emit("winordraw",{data:{winner:game.opponent.name},id:game.opponent.id})
+                        setGame({...game,winner:game.opponent.name})
+                    }
+                    else{
+                        setGame({...game,winner:board[element[0]]})
+                    }
                     flag = true;
                 }
             }
@@ -108,6 +120,7 @@ export const startgame = () => {
     }
     // change to move from x to o and viceversa
     const changeMove = (newMove) => {
+        localStorage.setItem("ftm",newMove);
         setGame({ ...game, move: newMove });
     };
     // someone has requested to join the game 
@@ -122,9 +135,8 @@ export const startgame = () => {
             if (urlPath === '/home') {
                 navigate('/game');
             }
-            // console.log(requesteduserid,)
-            // console.log({ requesteduserid,})
-            setopp( opponentName)
+            localStorage.setItem("ftm","X");
+            localStorage.setItem("opp",JSON.stringify({name:opponentName,id:requesteduserid}))
             setGame({ ...game,board:Array(9).fill(""), notification: false, isYourtime:false,show: false,opponent:{name:opponentName,id:requesteduserid}})
         }
     }
@@ -132,7 +144,6 @@ export const startgame = () => {
         if (isyes === "No") {
             setGame((prevData) => {
                 const messageIndex = prevData.notifiyUser.findIndex(item => item.id === requesteduserid);
-                console.log(messageIndex)
                 if (messageIndex !== -1) {
                     return ({
                         ...prevData,
