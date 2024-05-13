@@ -11,28 +11,25 @@ const Game = () => {
     const navigate = useNavigate();
     const { socket } = usesocketIoContext();
     useEffect(() => {
-        socket?.on("startplay", async ({ name,id}) => {
-            console.log({name,id})
-            setGame(prevState => ({ ...prevState,board:Array(9).fill(""), opponent: {name,id} ,show:false,notification:false,isYourtime:true}))
+        if(socket){
+        socket.on("startplay", async ({ name,id}) => {
+            localStorage.setItem("ftm","X")
+            localStorage.setItem("opp",JSON.stringify({name,id,turn:false}))
+            await setGame(prevState => ({ ...prevState,board:Array(9).fill(""), opponent: {name,id} ,show:false,notification:false,isYourtime:true}))
         }) 
-        socket?.on("moveposition", async ({move}) => {
+        socket.on("moveposition", ({move}) => {
             setGame(prev=>({...prev,isYourtime:true}))
-            clicked(move);
+            clicked(move,true);
         })
-        socket?.on("isDrawWin", async ({data})=>{
-            if(data?.draw === "yes"){
+        socket.on("isDrawWin", async ({data})=>{
+            if(data.draw === "yes"){
                 resetgame();
             }
-            else if(data?.winner){
-                const ftm = localStorage.getItem("ftm");
-                if (data?.winner === ftm){
-                    setGame(prev=>({...prev,winner:"game.opponent.name"}))
-                }
-                else{
-                    setGame(prev=>({...prev,winner:"fullName"}))
-                }
+            else if(data.winner){
+                    setGame(prev=>({...prev,winner:data.winner}))
             }
         })
+    }
         return () => {
             socket?.off("startplay");
             socket?.off("moveposition");
@@ -46,7 +43,7 @@ const Game = () => {
                     <span className='tic-tac-toe'>Tic-Tac-Toe</span>
                     {game.winner &&
                         <div className='after-winning-the-game'>
-                            <span style={{ fontSize: 20 }}>{game.winner} opponent won the match</span>
+                            <span style={{ fontSize: 20 }}>{game.winner} won the match</span>
                             <div style={{ display: 'flex', gap: 10 }}>
                                 <button onClick={e => navigate('/home')}>Go to Chat</button>
                                 <button onClick={resetgame}>Start new game</button>
