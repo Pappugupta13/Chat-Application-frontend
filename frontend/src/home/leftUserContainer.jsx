@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react'
 const UserSearch = lazy(() => import('../components/userSearch'));
 const UserProfile = lazy(() => import('../components/userProfile'));
+import { Document, Video, Camera } from '../components/svg';
 import '../cssFile/leftUserContainer.css';
 const ProfileViewer = lazy(() => import('../components/profileViewer'));
 import { useUserContext } from '../context/themeContext';
@@ -54,20 +55,40 @@ const LeftUserContainer = () => {
           <UserSearch chnage_show={change} Search_user={Search_user} />
         </div>
           <div className='user-scroll'>
-            {allUser.map((item, index) =>  (
+            {allUser.map((item, index) => (
 
               <div key={index}>
                 {item?.participants?.filter((item) => {
                   return search.toLowerCase() == '' ? item : item.fullName.toLowerCase().includes(search.toLowerCase())
                 }).map((data, index) => {
                   if (data._id === authuser.id) return;
+                  let lastmessage;
+                  if (item.latestMessage) {
+                    if (item.latestMessage.message) {
+                      lastmessage = item.latestMessage.message;
+                    }
+                    else if (item.latestMessage.link != "false") {
+                      lastmessage = item.latestMessage.link;
+                    }
+                    else if (item.latestMessage.video.type) {
+                      lastmessage = <><Video /> {item.latestMessage.video.name}</>
+                    }
+                    else if (item.latestMessage.image.type) {
+                      console.log(item.latestMessage.image)
+
+                      lastmessage =  <><Camera/> {item.latestMessage.image.name}</>
+                    }
+                    else {
+                      lastmessage = <><Document /> {item?.latestMessage.document.name}</>
+                    }
+                  }
                   return (
-                    <UserProfile key={index} index={index + 1} userData={data} lastMessage={item?.latestMessage?.message} chnage_show={change} />
+                    <UserProfile key={index} userData={data} lastMessage={lastmessage} chnage_show={change} />
                   )
                 })
                 }
               </div>))
-            
+
             }
           </div></div>)}
       </Suspense>
