@@ -5,6 +5,7 @@ Feature List:
 -   Authentication with JWT
 -   Login and Sign-up with Google
 -   Search the user
+-   View the user who is online
 -   Add && Delete the Status
 -   Dark/Light Mode
 -   Completely Responsive
